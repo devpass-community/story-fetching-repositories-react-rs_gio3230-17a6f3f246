@@ -7,7 +7,15 @@ const List = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchRepositories = async () => {
-    // TODO
+    setIsLoading(true);
+    try {
+      const response = await axios.get("https://api.github.com/users/devpass-tech/repos");
+      setRepositories(response.data);
+    } catch (error) {
+      console.error("Error fetching repositories:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -15,15 +23,17 @@ const List = () => {
       <div className="container">
         <h2 className="title">Devpass Repositories</h2>
 
-        { isLoading ?
-        ( <Spinner/> ) : 
-        ( 
-          <ListGroup className="repositoriesList">
+        {isLoading ?
+          (<Spinner />) :
+          (
+            <ListGroup className="repositoriesList">
 
-          { /* TODO */ }
-          
-          </ListGroup> )}
-      <Button data-testid="button" className="button" variant="primary" onClick={() => fetchRepositories()}>Fetch repositories</Button>
+              {repositories.map((repo) => (
+                <ListGroup.Item key={repo.id}>{repo.name}</ListGroup.Item>
+              ))}
+
+            </ListGroup>)}
+        <Button data-testid="button" className="button" variant="primary" onClick={() => fetchRepositories()}>Fetch repositories</Button>
       </div>
     </div>
   );
