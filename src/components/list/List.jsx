@@ -7,15 +7,17 @@ const List = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchRepositories = async () => {
-    setIsLoading(true);
+    setIsLoading(true); // Define isLoading como true para exibir o Spinner
+
     try {
-      const response = await axios.get("https://api.github.com/users/devpass-tech/repos");
-      setRepositories(response.data);
+      const response = await fetch("https://api.github.com/users/devpass-tech/repos");
+      const data = await response.json();
+      setRepositories(data); // Atualiza o estado com o array de repositórios recebido
     } catch (error) {
-      console.error("Error fetching repositories:", error);
-    } finally {
-      setIsLoading(false);
+      console.error("Erro ao buscar repositórios:", error);
     }
+
+    setIsLoading(false); // Define isLoading como false após a chamada ser concluída
   };
 
   return (
